@@ -2,6 +2,7 @@ import Express from 'express'
 
 import Logger from './utils/logger'
 import Auth from './utils/auth'
+import Graph from './graphql/graphC'
 
 const app = Express();
 
@@ -15,5 +16,6 @@ app.set('views', 'src/views')
 app.set('view engine', 'ejs')
 
 app.get('/', (_, res) => res.render('home'))
+app.use('/api', Graph.router)
 
 export default app;
