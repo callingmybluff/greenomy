@@ -2,7 +2,7 @@
 import Joi from 'joi'
 import DotEnv from 'dotenv'
 
-import logger from './logger';
+import Logger from './logger'
 
 DotEnv.config()
 
@@ -23,9 +23,7 @@ const schema = Joi.object()
 
 function validateConfig(schema: Joi.Schema) {
   const { value, error } = schema.validate(process.env);
-  if (error) {
-    logger.error(`Invalid environment: ${error.message}`);
-  }
+  if (error) Logger.error(`Invalid environment: ${error.message}`)
   return value;
 }
 
