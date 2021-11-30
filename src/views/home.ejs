@@ -2,11 +2,11 @@
 
   <header>
     <div>
-      <h2>Welcome!</h2>
-      <h3>By CallingMyBluff</h3>
-      <a href="/cars">Cars</a>
-      <a href="/offices">Offices</a>
-      <a href="/profile/bookings">My bookings</a>
+      <h2>Welcome, <%= locals.name ? locals.name : 'stranger' %>!</h2>
+      <h3><I>by CallingMyBluff</I></h3>
+      <a href="/api/cars">Cars</a>
+      <a href="/api/offices">Offices</a>
+      <a href="/api/bookings">My bookings</a>
     </div>
   </header>
 

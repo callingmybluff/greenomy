@@ -10,8 +10,11 @@
   <nav>
     <h1><a href="/">Booking System</a></h1>
     <ul>
-      <li><a href="/logout">Log out</a></li>
-      <li><a href="/login">Log in</a></li>
-      <li><a href="/signup">Sign up</a></li>
+      <% if (locals.name) { %>
+        <li><a href="/signout">Log out</a></li>
+      <% } else { %>
+        <li><a href="/signin">Log in</a></li>
+        <li><a href="/signup">Sign up</a></li>
+      <% } %>
     </ul>
   </nav>

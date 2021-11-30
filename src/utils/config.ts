@@ -16,8 +16,8 @@ const schema = Joi.object()
       .valid(devEnvString, testEnvString, prodEnvString)
       .default(devEnvString),
     PORT: Joi.number().port().default(3000),
-
     DB_URI: Joi.string().required(),
+    JWT_SECRET: Joi.string().required(),
   })
   .unknown();
 
@@ -38,4 +38,5 @@ export default {
   },
   port: envObject.PORT,
   dbUri: envObject.DB_URI,
+  jwtSecret: envObject.JWT_SECRET,
 }

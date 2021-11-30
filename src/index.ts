@@ -1,4 +1,5 @@
 import { Server } from 'http'
+import Mongoose from 'mongoose'
 
 import App from './app'
 import Logger from './utils/logger'
@@ -13,7 +14,12 @@ async function appStart(): Promise<Server> {
   })
 }
 
-appStart()
+Mongoose.connect(Config.dbUri)
+  .catch((err) => {
+    Logger.error(err)
+    process.exit(1)
+  })
+  .then(() => appStart())
   .then(() => Logger.info(
     `started server on :${Config.port} in ${Config.env.string} mode`
   ))
