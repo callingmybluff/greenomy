@@ -1,0 +1,36 @@
+<%- include('partials/header'); -%>
+  This is the list of <%= locals.title %>
+    <div id="list">
+      <center><i id="listTitle">loading ...</i></center>
+    </div>
+    <script>
+      var id = '<%= locals.id %>';
+      var query = '<%= locals.query %>';
+      function makeTheList(list) {
+        var listDOM = document.createElement('UL');
+        if (list.length === 0) {
+          document.getElementById('listTitle').innerHTML = 'Empty list'
+        } else {
+          list.forEach(item => {
+            var listItemDom = document.createElement('LI');
+            var but = document.createElement('BUTTON');
+            but.innerHTML = `Model: ${item.model} / Year: ${item.year}`;
+            but.onclick = function () {
+              console.log(item._id);
+            };
+            listItemDom.appendChild(but);
+            listDOM.appendChild(listItemDom);
+          });
+          document.getElementById('listTitle').replaceWith(listDOM);
+        }
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        post({
+          query: query
+        })
+          .then(res => makeTheList(res.data[id]))
+          .catch(err => console.log(err));
+      });
+
+    </script>
+    <%- include('partials/footer'); -%>

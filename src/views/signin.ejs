@@ -1,15 +1,44 @@
 <%- include('partials/header'); -%>
 
-<form action="/signin" method="post">
-  <h2>Login</h2>
-  <label for="name">Name</label>
-  <input type="text" name="name"  />
-  <label for="password">Password</label>
-  <input type="password" name="password"  />
-  <% if (locals.errors) { %>
-    <div style="color: red;"><%= locals.errors %></div>
-  <% } %>
-  <button>login</button>
-</form>
+  <form id="form">
+    <h2>Login</h2>
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" />
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" />
+    <div id="errors" style="color: red;"></div>
+    <input type="submit" id="submit" value="Login">
+  </form>
 
-<%- include('partials/footer'); -%>
+  <script>
+    document.getElementById('form').addEventListener('submit', function submitThis(event) {
+      event.preventDefault();
+
+      const buttun = document.getElementById('submit');
+      buttun.disabled = true;
+      buttun.value = 'Loading';
+
+      const name = document.getElementById('name').value,
+        password = document.getElementById('password').value
+      post({
+        query: `query {signin(name: \"${name}\", password: \"${password}\") {user, token}}`
+      })
+        .then(res => {
+          console.log(res.data);
+          // Set cookies then do this
+          document.cookie = 'user=' + res.data.signin.user;
+          // Should include expiry as well, but can not be bothered for a demo
+          document.cookie = 'jwt=' + res.data.signin.token;
+          window.location.href = "/";
+        })
+        .catch(err => {
+          if (err.errors)
+            document.getElementById('errors').innerHTML = JSON.stringify(err.errors);
+          buttun.disabled = false;
+        });
+
+      console.log('blaaa');
+    });
+  </script>
+
+  <%- include('partials/footer'); -%>

@@ -10,11 +10,16 @@
   <nav>
     <h1><a href="/">Booking System</a></h1>
     <ul>
-      <% if (locals.name) { %>
-        <li><a href="/signout">Log out</a></li>
-      <% } else { %>
-        <li><a href="/signin">Log in</a></li>
-        <li><a href="/signup">Sign up</a></li>
-      <% } %>
+      <li id="signout"><a href="/signout">Log out</a></li>
+      <li id="signin"><a href="/signin">Log in</a></li>
+      <li id="signup"><a href="/signup">Sign up</a></li>
     </ul>
   </nav>
+
+  <script>
+    if (document.cookie && document.cookie.length > 0) {
+      document.getElementById('signin').remove();
+      document.getElementById('signup').remove();
+    } else
+      document.getElementById('signout').remove();
+  </script>

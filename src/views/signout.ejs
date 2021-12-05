@@ -1,0 +1,13 @@
+<%- include('partials/header'); -%>
+
+  <div>
+    <center><i>Signing out ...</i></center>
+  </div>
+
+  <script>
+    document.cookie = 'user=1;max-age=0"';
+    document.cookie = 'jwt=2;max-age=0"';
+    window.location.href = "/";
+  </script>
+
+  <%- include('partials/footer'); -%>
