@@ -14,7 +14,11 @@
           list.forEach(item => {
             var listItemDom = document.createElement('LI');
             var but = document.createElement('BUTTON');
-            but.innerHTML = `Model: ${item.model} / Year: ${item.year}`;
+            // if car
+            if (item.model)
+              but.innerHTML = `Model: ${item.model} / Year: ${item.year}`;
+            else
+              but.innerHTML = `Located @ ${item.title}`;
             but.onclick = function () {
               console.log(item._id);
             };
