@@ -21,6 +21,7 @@ function responseWithToken(user: any) {
   return {
     token: createJWT(user._id),
     user: user.name,
+    id: user._id,
   }
 }
 

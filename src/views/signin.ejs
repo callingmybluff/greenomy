@@ -21,7 +21,7 @@
       const name = document.getElementById('name').value,
         password = document.getElementById('password').value
       post({
-        query: `query {signin(name: \"${name}\", password: \"${password}\") {user, token}}`
+        query: `query {signin(name: \"${name}\", password: \"${password}\") {user, token, id}}`
       })
         .then(res => {
           console.log(res.data);
@@ -29,6 +29,7 @@
           document.cookie = 'user=' + res.data.signin.user;
           // Should include expiry as well, but can not be bothered for a demo
           document.cookie = 'jwt=' + res.data.signin.token;
+          document.cookie = 'id=' + res.data.signin.id;
           window.location.href = "/";
         })
         .catch(err => {

@@ -12,7 +12,8 @@ const schema = buildSchema(`
     user: User
   }
   type AuthData {
-    user: ID!
+    id: ID!
+    user: String!
     token: String!
   }
   type User {

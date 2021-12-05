@@ -22,11 +22,12 @@
       const name = document.getElementById('name').value,
         password = document.getElementById('password').value
       post({
-        query: `mutation {signup(name: \"${name}\", password: \"${password}\") {user, token}}`
+        query: `mutation {signup(name: \"${name}\", password: \"${password}\") {user, token, id}}`
       })
         .then(res => {
           document.cookie = 'user=' + res.data.signup.user;
           document.cookie = 'jwt=' + res.data.signup.token;
+          document.cookie = 'id=' + res.data.signup.id;
           window.location.href = "/";
         })
         .catch(err => {
