@@ -7,5 +7,5 @@ interface IAuth {
 }
 
 export default {
-  signin: async ({ name, password }: IAuth, req: Express.Request) => AuthController.signin(name, password),
+  signin: async ({ name, password }: IAuth) => AuthController.signin(name, password),
 }
