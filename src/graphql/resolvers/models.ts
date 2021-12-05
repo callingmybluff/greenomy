@@ -1,4 +1,4 @@
-import UserController from '../../controllers/user'
+import AuthController from '../../controllers/auth'
 import CarController from '../../controllers/car'
 import OfficeController from '../../controllers/office'
 import CarBookingController from '../../controllers/carBooking'
@@ -12,11 +12,10 @@ interface IAuth {
 
 export default {
   signup: async ({ name, password }: IAuth) => {
-    const user = await UserController.signup(name, password)
+    const user = await AuthController.signup(name, password)
     return {
-      user: user.name,
-      token: 'token signup',
-      tokenExpiration: 1234,
+      user: user.user,
+      token: user.token,
     }
   },
 
