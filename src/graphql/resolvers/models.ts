@@ -35,6 +35,7 @@ export default {
     return {
       user: user.user,
       token: user.token,
+      id: user.id,
     }
   },
 
