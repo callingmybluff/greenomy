@@ -7,8 +7,8 @@ const schema = buildSchema(`
   ## root query ##
   type Query {
     signin(name: String!, password: String!): AuthData!
-    cars: [Car]!
-    offices: [Office]!
+    car: [Car]!
+    office: [Office]!
     user: User
   }
   type AuthData {

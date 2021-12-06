@@ -5,11 +5,12 @@ const bookingSchema = new Mongoose.Schema(
   {
     office: {
       type: Mongoose.Schema.Types.ObjectId,
-      ref: 'Office'
+      ref: 'Office',
+      unique: true,
     },
     user: {
       type: Mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
     },
   },
   {

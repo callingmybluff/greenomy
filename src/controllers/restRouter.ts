@@ -5,15 +5,15 @@ const router = Express.Router()
 router.get('/cars', (_, res) => res.render('list',
   {
     title: 'Cars',
-    id: 'cars',
-    query: 'query { cars {_id model year} }',
+    id: 'car',
+    query: 'query { car {_id model year} }',
   }
 ))
 router.get('/offices', (_, res) => res.render('list',
   {
     title: 'Offices',
-    id: 'offices',
-    query: 'query { offices {_id title} }',
+    id: 'office',
+    query: 'query { office {_id title} }',
   }
 ))
 router.get('/my-bookings', (_, res) => res.render('list',

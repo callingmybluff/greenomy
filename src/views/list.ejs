@@ -5,7 +5,11 @@
     </div>
     <script>
       var id = '<%= locals.id %>';
+      var idCapital = capitalizeFirstLetter(id);
       var query = '<%= locals.query %>';
+      function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
       function makeTheList(list) {
         var listDOM = document.createElement('UL');
         if (list.length === 0) {
@@ -13,16 +17,34 @@
         } else {
           list.forEach(item => {
             var listItemDom = document.createElement('LI');
-            var but = document.createElement('BUTTON');
+            var title = document.createElement('p');
+            var book = document.createElement('BUTTON'),
+              cancelBooking = document.createElement('BUTTON');
+            book.innerHTML = 'BOOK';
+            cancelBooking.innerHTML = 'Cancel Booking';
             // if car
             if (item.model)
-              but.innerHTML = `Model: ${item.model} / Year: ${item.year}`;
+              title.innerHTML = `Model: ${item.model} / Year: ${item.year}`;
             else
-              but.innerHTML = `Located @ ${item.title}`;
-            but.onclick = function () {
-              console.log(item._id);
+              title.innerHTML = `Located @ ${item.title}`;
+            book.onclick = function () {
+              post({
+                query: `mutation {book${idCapital}(${id}ID: \"${item._id}\")}`,
+              })
+                .then(res => {
+                  if (res.data[`book${idCapital}`])
+                    alert(`Car ${item._id} was BOOKED`);
+                  else
+                    alert('Not able to do the booking. Already booked?');
+                })
+                .catch(err => alert('Not able to do the booking. Already booked?'));
             };
-            listItemDom.appendChild(but);
+            cancelBooking.onclick = function () {
+              alert(`Booking cancelation for ${item._id} was sent`);
+            };
+            listItemDom.appendChild(title);
+            listItemDom.appendChild(book);
+            listItemDom.appendChild(cancelBooking);
             listDOM.appendChild(listItemDom);
           });
           document.getElementById('listTitle').replaceWith(listDOM);

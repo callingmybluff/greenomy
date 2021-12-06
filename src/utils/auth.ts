@@ -12,7 +12,7 @@ middleware.use(function (req: Express.Request, res: Express.Response, next: Expr
   const publicRoutes = ['/', '/signin', '/signup', '/signout']
   // Reset `isAuthorized`
   res.locals = {
-    isAuthorized: false,
+    isAuthorized: true, // FOR TESTING DO_NOT_COMMIT
     userID: req.cookies.id,
   }
 

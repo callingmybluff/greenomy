@@ -33,7 +33,7 @@ export default {
     }
   },
 
-  cars: (_: any, context: any) => {
+  car: (_: any, context: any) => {
     if (!context.isAuthorized)
       throw Error('Unauthorized')
     return CarController.getAll()
@@ -46,11 +46,11 @@ export default {
   bookCar: async ({ id }: IBookOrder, context: any) => {
     if (!context.isAuthorized)
       throw Error('Unauthorized')
-    return CarBookingController.create(id, context.id)
+    return CarBookingController.create(id, context.userID)
   },
   cancelCarBooking: async ({ bookingID }: ICarBooking, context: any) => CarBookingController.delete(bookingID),
 
-  offices: (_: any, context: any) => {
+  office: (_: any, context: any) => {
     if (!context.isAuthorized)
       throw Error('Unauthorized')
     return OfficeController.getAll()
@@ -63,7 +63,7 @@ export default {
   bookOffice: async ({ id }: IBookOrder, context: any) => {
     if (!context.isAuthorized)
       throw Error('Unauthorized')
-    return OfficeBookingController.create(id, context.id)
+    return OfficeBookingController.create(id, context.userID)
   },
   cancelOfficeBooking: async ({ bookingID }: IOfficeBooking, context: any) => {
     if (!context.isAuthorized)
