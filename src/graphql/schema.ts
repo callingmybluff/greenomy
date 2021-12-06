@@ -36,11 +36,11 @@ const schema = buildSchema(`
     signup(name: String!, password: String!): AuthData!
     addCar(model: String!, year: Int): Boolean
     bookCar(carID: ID!): Boolean
-    cancelCarBooking(bookingID: ID!): Boolean
+    cancelCarBooking(carID: ID!): Boolean
 
     addOffice(title: String!): Boolean
     bookOffice(officeID: ID!): Boolean
-    cancelOfficeBooking(bookingID: ID!): Boolean
+    cancelOfficeBooking(officeID: ID!): Boolean
   }
   schema {
     query: Query

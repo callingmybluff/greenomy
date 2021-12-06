@@ -40,7 +40,16 @@
                 .catch(err => alert('Not able to do the booking. Already booked?'));
             };
             cancelBooking.onclick = function () {
-              alert(`Booking cancelation for ${item._id} was sent`);
+              post({
+                query: `mutation {cancel${idCapital}Booking(${id}ID: \"${item._id}\")}`,
+              })
+                .then(res => {
+                  if (res.data[`cancel${idCapital}Booking`])
+                    alert(`Booking of ${item._id} was cenceled`);
+                  else
+                    alert('Not able to cancel booking. Sure you have one?');
+                })
+                .catch(err => alert('Not able to cancel booking. Sure you have one?'));
             };
             listItemDom.appendChild(title);
             listItemDom.appendChild(book);

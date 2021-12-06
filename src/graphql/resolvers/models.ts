@@ -16,13 +16,18 @@ interface ICar {
 interface IOffice {
   title: string
 }
-interface IBookOrder {
-  id: string
+interface ICarBookOrder {
+  carID: string
+}
+interface IOfficeBookOrder {
+  officeID: string
 }
 interface ICarBooking {
-  bookingID: string
+  carID: string
 }
-interface IOfficeBooking extends ICarBooking { }
+interface IOfficeBooking {
+  officeID: string
+}
 
 export default {
   signup: async ({ name, password }: IAuth) => {
@@ -43,12 +48,16 @@ export default {
       throw Error('Unauthorized')
     return CarController.add(model, year).then(() => true).catch(() => false)
   },
-  bookCar: async ({ id }: IBookOrder, context: any) => {
+  bookCar: async ({ carID }: ICarBookOrder, context: any) => {
     if (!context.isAuthorized)
       throw Error('Unauthorized')
-    return CarBookingController.create(id, context.userID)
+    return CarBookingController.create(carID, context.userID)
   },
-  cancelCarBooking: async ({ bookingID }: ICarBooking, context: any) => CarBookingController.delete(bookingID),
+  cancelCarBooking: async ({ carID }: ICarBooking, context: any) => {
+    if (!context.isAuthorized)
+      throw Error('Unauthorized')
+    return CarBookingController.delete(carID).then(res => res.deletedCount > 0)
+  },
 
   office: (_: any, context: any) => {
     if (!context.isAuthorized)
@@ -60,14 +69,14 @@ export default {
       throw Error('Unauthorized')
     return OfficeController.add(title).then(() => true).catch(() => false)
   },
-  bookOffice: async ({ id }: IBookOrder, context: any) => {
+  bookOffice: async ({ officeID }: IOfficeBookOrder, context: any) => {
     if (!context.isAuthorized)
       throw Error('Unauthorized')
-    return OfficeBookingController.create(id, context.userID)
+    return OfficeBookingController.create(officeID, context.userID)
   },
-  cancelOfficeBooking: async ({ bookingID }: IOfficeBooking, context: any) => {
+  cancelOfficeBooking: async ({ officeID }: IOfficeBooking, context: any) => {
     if (!context.isAuthorized)
       throw Error('Unauthorized')
-    return OfficeBookingController.delete(bookingID)
+    return OfficeBookingController.delete(officeID).then(res => res.deletedCount > 0)
   },
 }
