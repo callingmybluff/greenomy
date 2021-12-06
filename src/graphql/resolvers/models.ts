@@ -51,7 +51,7 @@ export default {
   bookCar: async ({ carID }: ICarBookOrder, context: any) => {
     if (!context.isAuthorized)
       throw Error('Unauthorized')
-    return CarBookingController.create(carID, context.userID)
+    return CarBookingController.create(carID, context.userID).then(res => res._id != undefined)
   },
   cancelCarBooking: async ({ carID }: ICarBooking, context: any) => {
     if (!context.isAuthorized)
@@ -72,7 +72,7 @@ export default {
   bookOffice: async ({ officeID }: IOfficeBookOrder, context: any) => {
     if (!context.isAuthorized)
       throw Error('Unauthorized')
-    return OfficeBookingController.create(officeID, context.userID)
+    return OfficeBookingController.create(officeID, context.userID).then(res => res._id != undefined)
   },
   cancelOfficeBooking: async ({ officeID }: IOfficeBooking, context: any) => {
     if (!context.isAuthorized)
