@@ -9,9 +9,15 @@ const middleware = Express.Router(),
   router = Express.Router()
 
 middleware.use(function (req: Express.Request, res: Express.Response, next: Express.NextFunction) {
-  const publicRoutes = ['/', '/signin', '/signup', '/signout', '/api']
+  const publicRoutes = ['/', '/signin', '/signup', '/signout']
+  // Reset `isAuthorized`
+  res.locals = {
+    isAuthorized: false,
+    userID: req.cookies.id,
+  }
 
   if (publicRoutes.includes(req.url)) {
+    res.locals.isAuthorized = true
     next()
   } else {
     const { jwt } = req.cookies
@@ -19,13 +25,14 @@ middleware.use(function (req: Express.Request, res: Express.Response, next: Expr
       JWT.verify(req.cookies.jwt, Config.jwtSecret, (err: JWT.VerifyErrors | null, decodedToken: object | undefined) => {
         if (err) {
           Logger.error(err.message)
-          res.redirect('/signin')
+          next()
         } else {
+          res.locals.isAuthorized = true
           next()
         }
       });
     } else {
-      res.redirect('/signin')
+      next()
     }
   }
 })

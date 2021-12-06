@@ -9,6 +9,20 @@ interface IAuth {
   name: string
   password: string
 }
+interface ICar {
+  model: string
+  year: number
+}
+interface IOffice {
+  title: string
+}
+interface IBookOrder {
+  id: string
+}
+interface ICarBooking {
+  bookingID: string
+}
+interface IOfficeBooking extends ICarBooking { }
 
 export default {
   signup: async ({ name, password }: IAuth) => {
@@ -19,13 +33,41 @@ export default {
     }
   },
 
-  cars: CarController.getAll,
-  addCar: async (model: string, year: number) => CarController.add(model, year).then(() => true).catch(() => false),
-  bookCar: async (carID: string) => CarBookingController.create(carID, '123'),
-  cancelCarBooking: async (bookingID: string) => CarBookingController.delete(bookingID),
+  cars: (_: any, context: any) => {
+    if (!context.isAuthorized)
+      throw Error('Unauthorized')
+    return CarController.getAll()
+  },
+  addCar: async ({ model, year }: ICar, context: any) => {
+    if (!context.isAuthorized)
+      throw Error('Unauthorized')
+    return CarController.add(model, year).then(() => true).catch(() => false)
+  },
+  bookCar: async ({ id }: IBookOrder, context: any) => {
+    if (!context.isAuthorized)
+      throw Error('Unauthorized')
+    return CarBookingController.create(id, context.id)
+  },
+  cancelCarBooking: async ({ bookingID }: ICarBooking, context: any) => CarBookingController.delete(bookingID),
 
-  offices: OfficeController.getAll,
-  addOffice: async (title: string) => OfficeController.add(title).then(() => true).catch(() => false),
-  bookOffice: async (officeID: string) => OfficeBookingController.create(officeID, '123'),
-  cancelOfficeBooking: async (bookingID: string) => OfficeBookingController.delete(bookingID),
+  offices: (_: any, context: any) => {
+    if (!context.isAuthorized)
+      throw Error('Unauthorized')
+    return OfficeController.getAll()
+  },
+  addOffice: async ({ title }: IOffice, context: any) => {
+    if (!context.isAuthorized)
+      throw Error('Unauthorized')
+    return OfficeController.add(title).then(() => true).catch(() => false)
+  },
+  bookOffice: async ({ id }: IBookOrder, context: any) => {
+    if (!context.isAuthorized)
+      throw Error('Unauthorized')
+    return OfficeBookingController.create(id, context.id)
+  },
+  cancelOfficeBooking: async ({ bookingID }: IOfficeBooking, context: any) => {
+    if (!context.isAuthorized)
+      throw Error('Unauthorized')
+    return OfficeBookingController.delete(bookingID)
+  },
 }
