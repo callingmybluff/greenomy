@@ -19,8 +19,8 @@ router.get('/offices', (_, res) => res.render('list',
 router.get('/my-bookings', (_, res) => res.render('list',
   {
     title: 'My Bookings',
-    id: 'myBookings',
-    qeury: '',
+    id: 'user',
+    query: 'query { user { cars {model, year, _id} offices {title, _id} } }',
   }
 ))
 

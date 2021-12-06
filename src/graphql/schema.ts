@@ -9,7 +9,7 @@ const schema = buildSchema(`
     signin(name: String!, password: String!): AuthData!
     car: [Car]!
     office: [Office]!
-    user: User
+    user: User!
   }
   type AuthData {
     id: ID!
@@ -17,7 +17,6 @@ const schema = buildSchema(`
     token: String!
   }
   type User {
-    _id: ID!
     name: String!
     cars: [Car!]!
     offices: [Office!]!

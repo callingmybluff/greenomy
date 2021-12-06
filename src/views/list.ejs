@@ -10,60 +10,73 @@
       function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
       }
-      function makeTheList(list) {
-        var listDOM = document.createElement('UL');
-        if (list.length === 0) {
-          document.getElementById('listTitle').innerHTML = 'Empty list'
-        } else {
-          list.forEach(item => {
-            var listItemDom = document.createElement('LI');
-            var title = document.createElement('p');
-            var book = document.createElement('BUTTON'),
-              cancelBooking = document.createElement('BUTTON');
-            book.innerHTML = 'BOOK';
-            cancelBooking.innerHTML = 'Cancel Booking';
-            // if car
-            if (item.model)
-              title.innerHTML = `Model: ${item.model} / Year: ${item.year}`;
-            else
-              title.innerHTML = `Located @ ${item.title}`;
-            book.onclick = function () {
-              post({
-                query: `mutation {book${idCapital}(${id}ID: \"${item._id}\")}`,
-              })
-                .then(res => {
-                  if (res.data[`book${idCapital}`])
-                    alert(`Car ${item._id} was BOOKED`);
-                  else
-                    alert('Not able to do the booking. Already booked?');
-                })
-                .catch(err => alert('Not able to do the booking. Already booked?'));
-            };
-            cancelBooking.onclick = function () {
-              post({
-                query: `mutation {cancel${idCapital}Booking(${id}ID: \"${item._id}\")}`,
-              })
-                .then(res => {
-                  if (res.data[`cancel${idCapital}Booking`])
-                    alert(`Booking of ${item._id} was cenceled`);
-                  else
-                    alert('Not able to cancel booking. Sure you have one?');
-                })
-                .catch(err => alert('Not able to cancel booking. Sure you have one?'));
-            };
-            listItemDom.appendChild(title);
-            listItemDom.appendChild(book);
-            listItemDom.appendChild(cancelBooking);
-            listDOM.appendChild(listItemDom);
+      function onBooking(item, id, idCapital) {
+        post({
+          query: `mutation {book${idCapital}(${id}ID: \"${item._id}\")}`,
+        })
+          .then(res => {
+            if (res.data[`book${idCapital}`])
+              alert(`${id} ${item._id} was BOOKED`);
+            else {
+              alert('Not able to do the booking. Already booked?');
+            }
+          })
+          .catch(err => {
+            alert('Not able to do the booking. Already booked?')
           });
-          document.getElementById('listTitle').replaceWith(listDOM);
-        }
+      }
+      function onCancelBooking(item, id, idCapital) {
+        post({
+          query: `mutation {cancel${idCapital}Booking(${id}ID: \"${item._id}\")}`,
+        })
+          .then(res => {
+            if (res.data[`cancel${idCapital}Booking`])
+              alert(`Booking of ${item._id} was cenceled`);
+            else
+              alert('Not able to cancel booking. Sure you have one?');
+          })
+          .catch(err => alert('Not able to cancel booking. Sure you have one?'));
+      }
+      function makeTheList(list, id, idCapital) {
+        var listDOM = document.createElement('UL');
+        list.forEach(item => {
+          var listItemDom = document.createElement('LI');
+          var title = document.createElement('p');
+          var book = document.createElement('BUTTON'),
+            cancelBooking = document.createElement('BUTTON');
+          book.innerHTML = 'BOOK';
+          cancelBooking.innerHTML = 'Cancel Booking';
+          // if car
+          if (item.model)
+            title.innerHTML = `Model: ${item.model} / Year: ${item.year}`;
+          else
+            title.innerHTML = `Located @ ${item.title}`;
+          book.onclick = onBooking.bind(null, item, id, idCapital);
+          cancelBooking.onclick = onCancelBooking.bind(null, item, id, idCapital);
+          listItemDom.appendChild(title);
+          listItemDom.appendChild(book);
+          listItemDom.appendChild(cancelBooking);
+          listDOM.appendChild(listItemDom);
+        });
+        return listDOM;
       }
       document.addEventListener("DOMContentLoaded", function () {
         post({
           query: query
         })
-          .then(res => makeTheList(res.data[id]))
+          .then(res => {
+            // If either cars of offices
+            if (Array.isArray(res.data[id]))
+              document.getElementById('listTitle').replaceWith(makeTheList(res.data[id], id, idCapital));
+            else {
+              var cars = document.createElement('DIV'),
+                offices = document.createElement('DIV');
+              cars.appendChild(makeTheList(res.data[id].cars, 'car', 'Car'));
+              offices.appendChild(makeTheList(res.data[id].offices, 'office', 'Office'));
+              document.getElementById('listTitle').replaceWith(cars);
+              cars.append(offices);
+            }
+          })
           .catch(err => document.getElementById('listTitle').innerHTML = JSON.stringify(err.errors));
       });
 
