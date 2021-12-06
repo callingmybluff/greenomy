@@ -14,7 +14,6 @@ app.use(Express.urlencoded({ extended: true }))
 // Just make sure `CookieParser` is before `AuthRouter`
 app.use(CookieParser())
 app.use(Logger.middleware)
-app.use(Express.static('./src/public'))
 
 app.set('views', 'src/views')
 app.set('view engine', 'ejs')
